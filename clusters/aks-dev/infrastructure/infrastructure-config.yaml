@@ -14,13 +14,8 @@ spec:
     name: flux-system
   path: ./infrastructure/config
   prune: true
-  healthChecks:
-    - apiVersion: apps/v1
-      kind: Deployment
-      name: external-secrets
-      namespace: external-secrets
   postBuild:
     substitute:
       KEYVAULT_URL: "https://actionrunnersgithubrunne.vault.azure.net"
-      AZURE_TENANT_ID: "${AZURE_TENANT_ID}"
-      MANAGED_IDENTITY_CLIENT_ID: "${MANAGED_IDENTITY_CLIENT_ID}"
+      AZURE_TENANT_ID: "fa7492f3-e949-4bd8-9963-e88b76996320"
+      MANAGED_IDENTITY_CLIENT_ID: "f22564fd-9edb-4749-8739-968296dde74e"
