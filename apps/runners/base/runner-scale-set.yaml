@@ -1,10 +1,6 @@
 # =============================================================================
 # Runner Scale Set - straw-hat-runners-linux
 # =============================================================================
-# This HelmRelease deploys the GitHub Actions Runner Scale Set
-# Values are overridden in environment-specific overlays
-# =============================================================================
-
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -40,26 +36,13 @@ spec:
       targetPath: githubConfigSecret.github_token
   values:
     githubConfigUrl: "https://github.com/BkCloudOps"
-    runnerGroup: "straw-hat-runners-linux"
     minRunners: 1
     maxRunners: 10
     containerMode:
       type: "dind"
-    template:
-      spec:
-        containers:
-          - name: runner
-            image: ghcr.io/actions/actions-runner:latest
-            resources:
-              requests:
-                cpu: "500m"
-                memory: "1Gi"
-              limits:
-                cpu: "2"
-                memory: "4Gi"
 
 ---
-# External Secret for GitHub PAT in flux-system namespace (where HelmRelease reads it)
+# External Secret for GitHub PAT in flux-system namespace
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
