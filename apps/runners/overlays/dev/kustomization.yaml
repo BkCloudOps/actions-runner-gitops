@@ -9,7 +9,7 @@ patches:
         value: 1
       - op: replace
         path: /spec/values/maxRunners
-        value: 5
+        value: 20
     target:
       kind: HelmRelease
       name: straw-hat-runners-linux
