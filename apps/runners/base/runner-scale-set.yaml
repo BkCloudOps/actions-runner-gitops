@@ -36,6 +36,7 @@ spec:
       targetPath: githubConfigSecret.github_token
   values:
     githubConfigUrl: "https://github.com/BkCloudOps"
+    runnerScaleSetName: "straw-hat-runners-linux"
     minRunners: 1
     maxRunners: 10
     containerMode:
