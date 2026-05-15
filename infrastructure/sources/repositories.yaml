@@ -6,7 +6,7 @@
 
 ---
 # ARC Runner Stack from GHCR (our custom chart)
-apiVersion: source.toolkit.fluxcd.io/v1beta2
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
   name: arc-runner-stack
@@ -41,7 +41,7 @@ spec:
 
 ---
 # ARC (GitHub Container Registry)
-apiVersion: source.toolkit.fluxcd.io/v1beta2
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
   name: arc-controller
@@ -53,7 +53,7 @@ spec:
     tag: "0.9.3"
 
 ---
-apiVersion: source.toolkit.fluxcd.io/v1beta2
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
   name: arc-runner-scale-set
