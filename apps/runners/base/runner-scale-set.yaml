@@ -1,0 +1,79 @@
+# =============================================================================
+# Runner Scale Set - straw-hat-runners-linux
+# =============================================================================
+# This HelmRelease deploys the GitHub Actions Runner Scale Set
+# Values are overridden in environment-specific overlays
+# =============================================================================
+
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: straw-hat-runners-linux
+  namespace: flux-system
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: gha-runner-scale-set
+      version: "0.9.x"
+      sourceRef:
+        kind: OCIRepository
+        name: arc-runner-scale-set
+        namespace: flux-system
+      interval: 12h
+  targetNamespace: arc-runners
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  dependsOn:
+    - name: arc-controller
+      namespace: flux-system
+    - name: external-secrets
+      namespace: flux-system
+  valuesFrom:
+    - kind: Secret
+      name: github-pat-secret
+      valuesKey: github_token
+      targetPath: githubConfigSecret.github_token
+  values:
+    githubConfigUrl: "https://github.com/BkCloudOps"
+    runnerGroup: "straw-hat-runners-linux"
+    minRunners: 1
+    maxRunners: 10
+    containerMode:
+      type: "dind"
+    template:
+      spec:
+        containers:
+          - name: runner
+            image: ghcr.io/actions/actions-runner:latest
+            resources:
+              requests:
+                cpu: "500m"
+                memory: "1Gi"
+              limits:
+                cpu: "2"
+                memory: "4Gi"
+
+---
+# External Secret for GitHub PAT (synced from Azure Key Vault)
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: github-pat-secret
+  namespace: arc-runners
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: azure-keyvault-store
+    kind: ClusterSecretStore
+  target:
+    name: github-pat-secret
+    creationPolicy: Owner
+  data:
+    - secretKey: github_token
+      remoteRef:
+        key: github-pat

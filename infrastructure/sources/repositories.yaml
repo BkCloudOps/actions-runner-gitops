@@ -1,0 +1,65 @@
+# =============================================================================
+# Helm & OCI Repositories
+# =============================================================================
+# Sources for all Helm charts used in this GitOps repo
+# =============================================================================
+
+---
+# ARC Runner Stack from GHCR (our custom chart)
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: OCIRepository
+metadata:
+  name: arc-runner-stack
+  namespace: flux-system
+spec:
+  interval: 5m
+  url: oci://ghcr.io/bkcloudops/charts/arc-runner-stack
+  ref:
+    tag: "1.0.0"
+
+---
+# External Secrets Operator
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: external-secrets
+  namespace: flux-system
+spec:
+  interval: 1h
+  url: https://charts.external-secrets.io
+
+---
+# cert-manager
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: jetstack
+  namespace: flux-system
+spec:
+  interval: 1h
+  url: https://charts.jetstack.io
+
+---
+# ARC (GitHub Container Registry)
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: OCIRepository
+metadata:
+  name: arc-controller
+  namespace: flux-system
+spec:
+  interval: 5m
+  url: oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set-controller
+  ref:
+    tag: "0.9.3"
+
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: OCIRepository
+metadata:
+  name: arc-runner-scale-set
+  namespace: flux-system
+spec:
+  interval: 5m
+  url: oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
+  ref:
+    tag: "0.9.3"

@@ -1,0 +1,41 @@
+# =============================================================================
+# Infrastructure Kustomization - Prod Cluster
+# =============================================================================
+
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: infrastructure-sources
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infrastructure/sources
+  prune: true
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: infrastructure-controllers
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: infrastructure-sources
+  interval: 1h
+  retryInterval: 1m
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infrastructure/controllers
+  prune: true
+  postBuild:
+    substitute:
+      KEYVAULT_URL: "https://kv-acme-platform-prod-eastus.vault.azure.net"
+      AZURE_TENANT_ID: "${AZURE_TENANT_ID}"
+      MANAGED_IDENTITY_CLIENT_ID: "${MANAGED_IDENTITY_CLIENT_ID}"
