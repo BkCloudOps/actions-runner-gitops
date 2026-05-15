@@ -17,7 +17,7 @@ spec:
       chart: gha-runner-scale-set
       version: "0.9.x"
       sourceRef:
-        kind: OCIRepository
+        kind: HelmRepository
         name: arc-runner-scale-set
         namespace: flux-system
       interval: 12h

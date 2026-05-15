@@ -1,21 +1,30 @@
 # =============================================================================
-# Helm & OCI Repositories
-# =============================================================================
-# Sources for all Helm charts used in this GitOps repo
+# Helm Repositories - Chart Sources
 # =============================================================================
 
 ---
-# ARC Runner Stack from GHCR (our custom chart)
+# GitHub Actions Runner Controller - using HelmRepository with OCI type
 apiVersion: source.toolkit.fluxcd.io/v1
-kind: OCIRepository
+kind: HelmRepository
 metadata:
-  name: arc-runner-stack
+  name: arc-controller
   namespace: flux-system
 spec:
-  interval: 5m
-  url: oci://ghcr.io/bkcloudops/charts/arc-runner-stack
-  ref:
-    tag: "1.0.0"
+  type: oci
+  interval: 1h
+  url: oci://ghcr.io/actions/actions-runner-controller-charts
+
+---
+# GitHub ARC Runner Scale Set (same registry)
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: arc-runner-scale-set
+  namespace: flux-system
+spec:
+  type: oci
+  interval: 1h
+  url: oci://ghcr.io/actions/actions-runner-controller-charts
 
 ---
 # External Secrets Operator
@@ -29,7 +38,7 @@ spec:
   url: https://charts.external-secrets.io
 
 ---
-# cert-manager
+# Jetstack (cert-manager)
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
@@ -38,28 +47,3 @@ metadata:
 spec:
   interval: 1h
   url: https://charts.jetstack.io
-
----
-# ARC (GitHub Container Registry)
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: OCIRepository
-metadata:
-  name: arc-controller
-  namespace: flux-system
-spec:
-  interval: 5m
-  url: oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set-controller
-  ref:
-    tag: "0.9.3"
-
----
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: OCIRepository
-metadata:
-  name: arc-runner-scale-set
-  namespace: flux-system
-spec:
-  interval: 5m
-  url: oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
-  ref:
-    tag: "0.9.3"
