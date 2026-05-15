@@ -59,12 +59,12 @@ spec:
                 memory: "4Gi"
 
 ---
-# External Secret for GitHub PAT (synced from Azure Key Vault)
+# External Secret for GitHub PAT in flux-system namespace (where HelmRelease reads it)
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: github-pat-secret
-  namespace: arc-runners
+  namespace: flux-system
 spec:
   refreshInterval: 1h
   secretStoreRef:
