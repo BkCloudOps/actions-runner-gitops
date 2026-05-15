@@ -41,6 +41,15 @@ spec:
     maxRunners: 10
     containerMode:
       type: "dind"
+    # Custom labels for the runner
+    template:
+      spec:
+        metadata:
+          labels:
+            runner-type: straw-hat
+            environment: dev
+            os: linux
+            arch: amd64
 
 ---
 # External Secret for GitHub PAT in flux-system namespace
