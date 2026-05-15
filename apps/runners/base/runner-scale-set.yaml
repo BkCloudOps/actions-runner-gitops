@@ -41,6 +41,21 @@ spec:
     maxRunners: 10
     containerMode:
       type: "dind"
+    # Custom GitHub runner labels
+    listenerTemplate:
+      metadata:
+        labels:
+          app: arc-runner-listener
+    template:
+      metadata:
+        labels:
+          app: arc-runner
+    # Additional labels for workflow targeting
+    labels:
+      - self-hosted
+      - linux
+      - x64
+      - scale-set
 
 ---
 # External Secret for GitHub PAT in flux-system namespace
