@@ -37,6 +37,7 @@ spec:
   values:
     githubConfigUrl: "https://github.com/BkCloudOps"
     runnerScaleSetName: "straw-hat-runners-linux"
+    runnerGroup: "straw-hat-runners-linux-dev"
     minRunners: 1
     maxRunners: 10
     containerMode:
