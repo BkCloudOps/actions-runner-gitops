@@ -41,16 +41,7 @@ spec:
     maxRunners: 10
     containerMode:
       type: "dind"
-    # Custom GitHub runner labels
-    listenerTemplate:
-      metadata:
-        labels:
-          app: arc-runner-listener
-    template:
-      metadata:
-        labels:
-          app: arc-runner
-    # Additional labels for workflow targeting
+    # GitHub runner labels for workflow targeting (runs-on)
     labels:
       - self-hosted
       - linux
