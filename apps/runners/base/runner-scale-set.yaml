@@ -29,15 +29,18 @@ spec:
       namespace: flux-system
     - name: external-secrets
       namespace: flux-system
-  valuesFrom:
-    - kind: Secret
-      name: github-pat-secret
-      valuesKey: github_token
-      targetPath: githubConfigSecret.github_token
+  # NOTE: Do NOT inject the PAT via valuesFrom here. The ExternalSecret below
+  # syncs `github-pat-secret` (with key `github_token`) from Azure Key Vault
+  # in the `arc-runners` namespace; the chart consumes it by name.
+  # See docs/13-crd-reference.md (githubConfigSecret) and docs/07-authentication.md.
   values:
     githubConfigUrl: "https://github.com/BkCloudOps"
+    githubConfigSecret: github-pat-secret
+    # `runnerScaleSetName` is what appears in the GitHub UI and is patched
+    # per-environment by overlays. `runnerGroup` is the (pre-existing) GitHub
+    # runner group; leave at "default" unless a custom group exists on GitHub.
     runnerScaleSetName: "straw-hat-runners-linux"
-    runnerGroup: "straw-hat-runners-linux-dev"
+    runnerGroup: "default"
     minRunners: 1
     maxRunners: 10
     containerMode:
