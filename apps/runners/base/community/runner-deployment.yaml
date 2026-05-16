@@ -1,0 +1,88 @@
+# =============================================================================
+# Flavor: community (actions-runner-controller / summerwind, legacy)
+# =============================================================================
+# Installs the legacy actions-runner-controller and a RunnerDeployment per
+# type. Kept here for orgs that have not yet migrated to the official
+# gha-runner-scale-set chart. Overlays patch the RunnerDeployment with:
+#   - metadata.name                -> straw-hat-runners-linux-<env>-<type>
+#   - spec.template.spec.image     -> ghcr.io/strawhat-enterprise/actions-runner:<type>-latest
+#   - spec.template.spec.group     -> same (runnerGroup)
+#   - spec.replicas
+#
+# External-Secrets and cert-manager (a hard dep of this controller too) are
+# NOT part of this layer — they live in infrastructure/controllers.
+# =============================================================================
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: actions-runner-system
+  labels:
+    toolkit.fluxcd.io/tenant: runners
+
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: actions-runner-controller
+  namespace: flux-system
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: actions-runner-controller
+      version: "0.23.x"
+      sourceRef:
+        kind: HelmRepository
+        name: actions-runner-controller
+        namespace: flux-system
+      interval: 12h
+  targetNamespace: actions-runner-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  dependsOn:
+    - name: cert-manager
+      namespace: flux-system
+    - name: external-secrets
+      namespace: flux-system
+  values:
+    authSecret:
+      create: false
+      name: controller-manager
+    # Use the PAT synced by ESO (key: github_token in github-pat-secret) —
+    # the bootstrap overlay copies it into the controller-manager Secret with
+    # the legacy field name `github_token`.
+
+---
+# Per-type RunnerDeployment template. Overlays patch name/group/image/replicas.
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: RunnerDeployment
+metadata:
+  name: runner-deployment  # patched
+  namespace: actions-runner-system
+spec:
+  replicas: 1
+  template:
+    spec:
+      organization: StrawHat-Enterprise
+      group: "default"  # patched -> straw-hat-runners-linux-<env>-<type>
+      image: ghcr.io/strawhat-enterprise/actions-runner:linux-latest  # patched
+      imagePullSecrets:
+        - name: ghcr-pull-secret
+      labels:
+        - self-hosted
+        - linux
+        - x64
+        - community
+      dockerEnabled: true
+      resources:
+        requests:
+          cpu: "500m"
+          memory: "1Gi"
+        limits:
+          cpu: "2"
+          memory: "4Gi"

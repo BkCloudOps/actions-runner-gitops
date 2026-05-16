@@ -1,3 +1,10 @@
+# =============================================================================
+# ARC Controller (gha-runner-scale-set-controller) — shared across flavors.
+# =============================================================================
+# The controller is required only by the gh-supported flavor; the community
+# flavor brings its own controller. The cluster Kustomization includes this
+# file only when at least one gh-supported scale set is enabled.
+# =============================================================================
 ---
 apiVersion: v1
 kind: Namespace
@@ -15,7 +22,6 @@ metadata:
     toolkit.fluxcd.io/tenant: runners
 
 ---
-# ARC Controller
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:

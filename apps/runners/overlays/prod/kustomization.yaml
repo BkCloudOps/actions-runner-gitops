@@ -1,18 +1,9 @@
+# =============================================================================
+# Aggregator overlay for the prod cluster.
+# =============================================================================
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ../../base
-patches:
-  - patch: |
-      - op: replace
-        path: /spec/values/minRunners
-        value: 2
-      - op: replace
-        path: /spec/values/maxRunners
-        value: 20
-      - op: replace
-        path: /spec/values/runnerScaleSetName
-        value: "straw-hat-runners-linux-prod"
-    target:
-      kind: HelmRelease
-      name: straw-hat-runners-linux
+  - ../../shared
+  - dind
+  # - kubernetes

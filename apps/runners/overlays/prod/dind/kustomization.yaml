@@ -1,0 +1,34 @@
+# =============================================================================
+# Per-runner-type overlay (prod / dind / gh-supported flavor)
+# =============================================================================
+# Final name: straw-hat-runners-linux-prod-dind
+# =============================================================================
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: flux-system
+resources:
+  - ../../../base/gh-supported
+nameSuffix: -prod-dind
+patches:
+  - patch: |
+      - op: replace
+        path: /spec/values/runnerScaleSetName
+        value: "straw-hat-runners-linux-prod-dind"
+      - op: replace
+        path: /spec/values/runnerGroup
+        value: "straw-hat-runners-linux-prod-dind"
+      - op: replace
+        path: /spec/values/minRunners
+        value: 2
+      - op: replace
+        path: /spec/values/maxRunners
+        value: 50
+      - op: replace
+        path: /spec/values/containerMode/type
+        value: "dind"
+      - op: replace
+        path: /spec/values/template/spec/containers/0/image
+        value: "ghcr.io/strawhat-enterprise/actions-runner:linux-dind-latest"
+    target:
+      kind: HelmRelease
+      name: runner-scale-set

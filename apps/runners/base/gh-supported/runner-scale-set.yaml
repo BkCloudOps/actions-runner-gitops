@@ -1,0 +1,74 @@
+# =============================================================================
+# Flavor: gh-supported (actions/gha-runner-scale-set, official)
+# =============================================================================
+# Base template for a single runner scale set. Each per-type overlay sets:
+#   - metadata.name           -> straw-hat-runners-linux-<env>-<type>
+#   - runnerScaleSetName      -> same
+#   - runnerGroup             -> same (must exist on GitHub)
+#   - template.spec.containers[0].image -> ghcr.io/strawhat-enterprise/actions-runner:<type>-latest
+#   - containerMode.type
+#   - min/maxRunners
+#
+# External-Secrets / cert-manager are NOT part of this layer. They are
+# installed by infrastructure/controllers (bootstrap).
+# =============================================================================
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: runner-scale-set  # overridden by overlays
+  namespace: flux-system
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: gha-runner-scale-set
+      version: "0.9.x"
+      sourceRef:
+        kind: HelmRepository
+        name: arc-runner-scale-set
+        namespace: flux-system
+      interval: 12h
+  targetNamespace: arc-runners
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  dependsOn:
+    - name: arc-controller
+      namespace: flux-system
+    - name: external-secrets
+      namespace: flux-system
+  values:
+    githubConfigUrl: "https://github.com/StrawHat-Enterprise"
+    githubConfigSecret: github-pat-secret
+    runnerScaleSetName: "straw-hat-runners-linux"  # patched
+    runnerGroup: "default"                          # patched
+    minRunners: 1
+    maxRunners: 10
+    containerMode:
+      type: "dind"
+    labels:
+      - self-hosted
+      - linux
+      - x64
+      - scale-set
+    template:
+      spec:
+        containers:
+          - name: runner
+            image: ghcr.io/strawhat-enterprise/actions-runner:linux-latest  # patched
+            command: ["/home/runner/run.sh"]
+            resources:
+              requests:
+                cpu: "500m"
+                memory: "1Gi"
+              limits:
+                cpu: "2"
+                memory: "4Gi"
+            # Pull from GHCR using the dockerconfigjson secret materialized
+            # by ESO in the runner namespace.
+        imagePullSecrets:
+          - name: ghcr-pull-secret

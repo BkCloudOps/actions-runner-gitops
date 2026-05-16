@@ -1,18 +1,14 @@
+# =============================================================================
+# Aggregator overlay for the dev cluster.
+# =============================================================================
+# Enable runner types by uncommenting the corresponding entries below. The
+# IssueOps workflow (issueops-bootstrap-runners-v2.yml in InfraCreator) can
+# also rewrite this file programmatically.
+# =============================================================================
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ../../base
-patches:
-  - patch: |
-      - op: replace
-        path: /spec/values/minRunners
-        value: 1
-      - op: replace
-        path: /spec/values/maxRunners
-        value: 40
-      - op: replace
-        path: /spec/values/runnerScaleSetName
-        value: "straw-hat-runners-linux-dev"
-    target:
-      kind: HelmRelease
-      name: straw-hat-runners-linux
+  - ../../shared
+  - dind
+  # - kubernetes
+  # - gpu
