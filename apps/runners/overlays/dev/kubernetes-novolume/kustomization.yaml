@@ -12,7 +12,7 @@ patches:
         value: "straw-runners-linux-dev-k8s-novol"
       - op: replace
         path: /spec/values/runnerGroup
-        value: "straw-runners-linux-dev-k8s-novol"
+        value: "Default"
       - op: replace
         path: /spec/values/containerMode/type
         value: "dind"

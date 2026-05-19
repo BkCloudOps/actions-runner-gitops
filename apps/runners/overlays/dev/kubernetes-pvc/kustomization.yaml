@@ -11,7 +11,7 @@ patches:
         value: "straw-hat-runners-linux-dev-kubernetes-pvc"
       - op: replace
         path: /spec/values/runnerGroup
-        value: "straw-hat-runners-linux-dev-kubernetes-pvc"
+        value: "Default"
       - op: replace
         path: /spec/values/containerMode/type
         value: "kubernetes"
