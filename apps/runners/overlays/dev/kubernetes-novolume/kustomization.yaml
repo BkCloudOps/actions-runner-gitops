@@ -14,8 +14,8 @@ patches:
         value: "straw-hat-runners-linux-dev-kubernetes-novolume"
       - op: replace
         path: /spec/values/containerMode/type
-        value: "kubernetes-novolume"
-                  - op: replace
+        value: "kubernetes"
+      - op: replace
         path: /spec/values/template/spec/containers/0/image
         value: "ghcr.io/strawhat-enterprise/actions-runner:linux-kubernetes-latest"
     target:

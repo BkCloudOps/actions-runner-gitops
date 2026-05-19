@@ -15,15 +15,16 @@ patches:
       - op: replace
         path: /spec/values/containerMode/type
         value: "kubernetes"
-                  - op: add
-                  path: /spec/values/containerMode/kubernetesModeWorkVolumeClaim
-                  value:
-                    accessModes:
-                      - ReadWriteOnce
-                    storageClassName: managed-csi
-                    resources:
-                      requests:
-                        storage: 10Gi                - op: replace
+      - op: add
+        path: /spec/values/containerMode/kubernetesModeWorkVolumeClaim
+        value:
+          accessModes:
+            - ReadWriteOnce
+          storageClassName: managed-csi
+          resources:
+            requests:
+              storage: 10Gi
+      - op: replace
         path: /spec/values/template/spec/containers/0/image
         value: "ghcr.io/strawhat-enterprise/actions-runner:linux-kubernetes-latest"
     target:
