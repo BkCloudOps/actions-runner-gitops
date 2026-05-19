@@ -24,6 +24,11 @@ patches:
           resources:
             requests:
               storage: 10Gi
+      - op: add
+        path: /spec/values/template/spec/securityContext
+        value:
+          fsGroup: 1001
+          fsGroupChangePolicy: OnRootMismatch
     target:
       kind: HelmRelease
       name: runner-scale-set
