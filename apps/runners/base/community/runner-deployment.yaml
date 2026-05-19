@@ -5,7 +5,7 @@
 # type. Kept here for orgs that have not yet migrated to the official
 # gha-runner-scale-set chart. Overlays patch the RunnerDeployment with:
 #   - metadata.name                -> straw-hat-runners-linux-<env>-<type>
-#   - spec.template.spec.image     -> ghcr.io/strawhat-enterprise/actions-runner:<type>-latest
+#   - spec.template.spec.image     -> ghcr.io/actions/actions-runner:latest
 #   - spec.template.spec.group     -> same (runnerGroup)
 #   - spec.replicas
 #
@@ -70,7 +70,7 @@ spec:
     spec:
       organization: StrawHat-Enterprise
       group: "default"  # patched -> straw-hat-runners-linux-<env>-<type>
-      image: ghcr.io/strawhat-enterprise/actions-runner:linux-latest  # patched
+      image: ghcr.io/actions/actions-runner:latest  # patched
       imagePullSecrets:
         - name: ghcr-pull-secret
       labels:

@@ -27,7 +27,7 @@ apps/runners/
 ## Naming contract
 
 - Runner scale-set name & GitHub runner group: **`straw-hat-runners-linux-<env>-<type>`**
-- Runner image: **`ghcr.io/strawhat-enterprise/actions-runner:linux-<type>-latest`** (pulled with `ghcr-pull-secret`, synced from Key Vault by ESO)
+- Runner image: **`ghcr.io/actions/actions-runner:latest`** (pulled with `ghcr-pull-secret`, synced from Key Vault by ESO)
 
 ## Flavors
 

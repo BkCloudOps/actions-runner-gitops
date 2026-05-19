@@ -5,7 +5,7 @@
 #   - metadata.name           -> straw-hat-runners-linux-<env>-<type>
 #   - runnerScaleSetName      -> same
 #   - runnerGroup             -> same (must exist on GitHub)
-#   - template.spec.containers[0].image -> ghcr.io/strawhat-enterprise/actions-runner:<type>-latest
+#   - template.spec.containers[0].image -> ghcr.io/actions/actions-runner:latest
 #   - containerMode.type
 #   - min/maxRunners
 #

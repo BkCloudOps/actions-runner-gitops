@@ -27,7 +27,7 @@ patches:
         value: "dind"
       - op: replace
         path: /spec/values/template/spec/containers/0/image
-        value: "ghcr.io/strawhat-enterprise/actions-runner:linux-gpu-latest"
+        value: "ghcr.io/actions/actions-runner:latest"
       - op: add
         path: /spec/values/template/spec/nodeSelector
         value:
