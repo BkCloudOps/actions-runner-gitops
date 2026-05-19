@@ -50,7 +50,7 @@ spec:
     maxRunners: 10
     containerMode:
       type: "dind"
-    labels:
+    scaleSetLabels:
       - self-hosted
       - linux
       - x64
