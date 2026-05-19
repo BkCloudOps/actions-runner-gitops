@@ -11,7 +11,7 @@ patches:
         value: "straw-hat-runners-linux-dev-dind"
       - op: replace
         path: /spec/values/runnerGroup
-        value: "Default"
+        value: "straw-hat-runners-linux-dev-dind"
       - op: replace
         path: /spec/values/containerMode/type
         value: "dind"
