@@ -1,33 +1,40 @@
 # =============================================================================
-# Per-runner-type overlay (prod / dind / gh-supported flavor)
-# =============================================================================
-# Final name: straw-hat-runners-linux-prod-dind
+# Per-runner-type overlay (prod / kubernetes-pvc / gh-supported flavor)
 # =============================================================================
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../../base/gh-supported
-nameSuffix: -prod-dind
+nameSuffix: -prod-kubernetes-pvc
 patches:
   - patch: |
       - op: replace
         path: /spec/values/runnerScaleSetName
-        value: "straw-hat-runners-linux-prod-dind"
+        value: "straw-hat-runners-linux-prod-kubernetes-pvc"
       - op: replace
         path: /spec/values/runnerGroup
-        value: "straw-hat-runners-linux-prod-dind"
+        value: "straw-hat-runners-linux-prod-kubernetes-pvc"
       - op: replace
         path: /spec/values/minRunners
         value: 2
       - op: replace
         path: /spec/values/maxRunners
-        value: 50
+        value: 30
       - op: replace
         path: /spec/values/containerMode/type
-        value: "dind"
+        value: "kubernetes"
+      - op: add
+        path: /spec/values/containerMode/kubernetesModeWorkVolumeClaim
+        value:
+          accessModes:
+            - ReadWriteOnce
+          storageClassName: managed-csi
+          resources:
+            requests:
+              storage: 10Gi
       - op: replace
         path: /spec/values/template/spec/containers/0/image
-        value: "ghcr.io/strawhat-enterprise/actions-runner:linux-dind-latest"
+        value: "ghcr.io/strawhat-enterprise/actions-runner:linux-kubernetes-latest"
     target:
       kind: HelmRelease
       name: runner-scale-set

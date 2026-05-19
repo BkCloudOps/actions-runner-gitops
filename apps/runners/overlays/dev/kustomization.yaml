@@ -10,5 +10,4 @@ kind: Kustomization
 resources:
   - ../../shared
   - dind
-  # - kubernetes
-  # - gpu
+  # Community flavor baseline keeps dind only.
