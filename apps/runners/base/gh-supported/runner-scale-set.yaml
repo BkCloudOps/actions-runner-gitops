@@ -59,7 +59,7 @@ spec:
       spec:
         containers:
           - name: runner
-            image: ghcr.io/strawhat-enterprise/actions-runner:linux-latest  # patched
+            image: ghcr.io/actions/actions-runner:latest
             command: ["/home/runner/run.sh"]
             resources:
               requests:
