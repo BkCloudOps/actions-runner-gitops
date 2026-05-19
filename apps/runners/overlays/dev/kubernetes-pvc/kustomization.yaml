@@ -24,9 +24,6 @@ patches:
           resources:
             requests:
               storage: 10Gi
-      - op: replace
-        path: /spec/values/template/spec/containers/0/image
-        value: "ghcr.io/strawhat-enterprise/actions-runner:linux-kubernetes-latest"
     target:
       kind: HelmRelease
       name: runner-scale-set

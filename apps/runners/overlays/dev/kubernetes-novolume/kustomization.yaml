@@ -16,9 +16,6 @@ patches:
       - op: replace
         path: /spec/values/containerMode/type
         value: "dind"
-      - op: replace
-        path: /spec/values/template/spec/containers/0/image
-        value: "ghcr.io/strawhat-enterprise/actions-runner:linux-dind-latest"
     target:
       kind: HelmRelease
       name: runner-scale-set
