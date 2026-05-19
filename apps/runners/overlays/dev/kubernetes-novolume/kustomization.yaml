@@ -3,15 +3,15 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../../base/gh-supported
-nameSuffix: -dev-kubernetes-novolume
+nameSuffix: -dev-k8s-novol
 patches:
   - patch: |
       - op: replace
         path: /spec/values/runnerScaleSetName
-        value: "straw-hat-runners-linux-dev-kubernetes-novolume"
+        value: "straw-runners-linux-dev-k8s-novol"
       - op: replace
         path: /spec/values/runnerGroup
-        value: "straw-hat-runners-linux-dev-kubernetes-novolume"
+        value: "straw-runners-linux-dev-k8s-novol"
       - op: replace
         path: /spec/values/containerMode/type
         value: "kubernetes"
